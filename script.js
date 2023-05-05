@@ -269,7 +269,7 @@ function displayPastOutings() {
 
       const outingDate = document.createElement('p');
       const date = new Date(outing.date).toLocaleDateString();
-      outingDate.innerHTML = `${date}`;
+      outingDate.innerHTML = `<span class="opacity-50">${date}</span>`;
 
       const spottedBirdsList = document.createElement('ul');
       outing.spottedBirds.forEach((bird) => {
@@ -278,12 +278,12 @@ function displayPastOutings() {
         spottedBirdsList.appendChild(spottedBird);
       });
 
-      const outingInfo = document.createElement('p');
-      outingInfo.innerHTML = `Total Points: ${outing.totalPoints}<br>Notes: ${outing.notes}`;
+      const outingInfo = document.createElement('div');
+      outingInfo.innerHTML = `<div class="points">${outing.totalPoints} points</div><div class="notes"><span class="label">Notes</span>${outing.notes}</div><h4>Bird List</h4>`;
 
       const removeLink = document.createElement('a');
       removeLink.href = 'javascript:void(0)';
-      removeLink.textContent = 'REMOVE';
+      removeLink.textContent = 'DROP';
       removeLink.style.color = 'red';
 
       removeLink.addEventListener('click', () => {
@@ -297,9 +297,9 @@ function displayPastOutings() {
       });
 
       outingDiv.appendChild(outingTitle);
-      outingDiv.appendChild(outingDate);
       outingDiv.appendChild(outingInfo);
       outingDiv.appendChild(spottedBirdsList);
+      outingDiv.appendChild(outingDate);
       outingDiv.appendChild(removeLink);
 
       pastOutingsList.appendChild(outingDiv);

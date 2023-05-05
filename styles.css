@@ -17,6 +17,10 @@ h1, h2, h3{
   font-weight: 600;
 }
 
+.opacity-50{
+  opacity: .5;
+}
+
 .heading{
   position: fixed;
   width:calc(100% - 2rem);
@@ -133,13 +137,26 @@ input{
 .past-outing{
   border-radius:10px;
   background-color:#fff;
-  padding:1rem;
+  padding:1rem 1rem .5rem;
   margin-bottom:1rem;
+  position: relative;
+}
+
+.past-outing h3{
+  background:url(icon-location.svg) no-repeat -5px top;
+  background-size: auto 100%;
+  padding-left: 1.5rem;
 }
 
 .past-outing a:last-child{
   text-decoration: none;
   font-size:.75rem;
+  font-weight: 500;
+  top:1rem;
+  right:1rem;
+  position: absolute;
+  color:darkred !important;
+  opacity: .5;
 }
 
 #save-outing, #add-bird, #save-settings{
@@ -290,6 +307,23 @@ input{
 }
 .point-input{
   text-align: center;
+}
+
+.notes{
+  margin-top:1rem;
+}
+
+.notes .label{
+  display: block;
+}
+
+.past-outing h4{
+  font-weight: 600;
+  margin-bottom:0;
+}
+.past-outing ul{
+  margin-top:.5rem;
+  padding-left:1rem;
 }
 
 
