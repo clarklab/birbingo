@@ -49,7 +49,7 @@
       <form id="settings-form">
         <div id="settings-bird-list"></div>
         <button type="button" id="add-bird">Add Bird</button>
-        <button type="submit">Save Settings</button>
+        <button type="submit" id="save-settings">Save Settings</button>
 
         <a href="javascript:void(0)" id="reset-defaults">Reset to Defaults</a>
 
@@ -58,9 +58,31 @@
   </main>
 
   <nav id="bottom-navbar">
-    <button class="nav-item" data-view="new-outing"><img src="icon-bird.png" width="24" alt=""><span>New Outing</span></button>
-    <button class="nav-item active" data-view="past-outings"><img src="icon-binocs.png" width="24" alt=""><span>Past Outings</span></button>
-    <button class="nav-item" data-view="settings"><img src="icon-slider.png" width="24" alt=""><span>Settings</span></button>
+    <button class="nav-item" data-view="new-outing"><svg width="24" viewBox="0 0 329 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="94.5432" y="252.665" width="32" height="85" rx="16" transform="rotate(-29.5 94.5432 252.665)" fill="#FF8D00"/>
+<rect x="154.543" y="252.665" width="32" height="85" rx="16" transform="rotate(-29.5 154.543 252.665)" fill="#FF8D00"/>
+<path d="M317.351 80.9378C322.017 83.6321 322.017 90.3679 317.351 93.0622L279.851 114.713V59.2872L317.351 80.9378Z" fill="#FF8D00"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M280.841 109C280.835 109 280.83 109.004 280.83 109.01C279.785 185.974 238.563 266 139.851 266C49.9672 266 7.75006 201.264 0.128181 131.618C-1.29933 118.573 9.38956 107.85 22.5103 107.664L139.851 106C150.344 106 158.851 97.4934 158.851 87V62V61.004C158.851 61.0018 158.853 61 158.855 61C158.856 61 158.857 60.9997 158.857 60.9992C158.858 60.9984 158.859 60.9973 158.859 60.996C159.395 27.7697 186.497 1 219.851 1C253.205 1 280.306 27.7697 280.843 60.996C280.843 60.9973 280.843 60.9984 280.844 60.9992C280.845 60.9997 280.846 61 280.847 61C280.849 61 280.851 61.0018 280.851 61.004V62V106V108.99C280.851 108.995 280.846 109 280.841 109ZM218.851 99C227.687 99 234.851 91.8366 234.851 83C234.851 74.1634 227.687 67 218.851 67C210.014 67 202.851 74.1634 202.851 83C202.851 91.8366 210.014 99 218.851 99Z" fill="#779E32"/>
+</svg>
+
+<span>New Outing</span></button>
+    <button class="nav-item active" data-view="past-outings"><svg width="24" viewBox="0 0 328 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="64" y="23" width="60" height="47" rx="10" fill="#FF8D00"/>
+<rect x="204" y="23" width="60" height="47" rx="10" fill="#FF8D00"/>
+<path d="M60.9852 64C50.7585 64 42.1793 71.7149 41.0974 81.8843L35.8646 131.073C35.7693 131.968 35.5099 132.835 35.1802 133.673C35.152 133.745 35.1242 133.816 35.0967 133.889L8.92109 202.693C6.32874 209.507 5 216.737 5 224.028V285C5 296.046 13.9543 305 25 305H105C116.046 305 125 296.046 125 285V166C125 161.582 128.582 158 133 158H196C200.418 158 204 161.582 204 166V285C204 296.046 212.954 305 224 305H304C315.046 305 324 296.046 324 285V224.028C324 216.737 322.671 209.507 320.079 202.693L293.903 133.889C293.634 133.181 293.328 132.496 292.987 131.834C292.417 130.728 291.974 129.551 291.842 128.314L286.903 81.8843C285.821 71.715 277.242 64 267.015 64H60.9852Z" fill="#682626"/>
+<rect x="143" y="64" width="41" height="94" fill="#FF8D00"/>
+</svg>
+<span>Past Outings</span></button>
+    <button class="nav-item" data-view="settings"><svg width="24" viewBox="0 0 328 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="48" y="11" width="35" height="305" rx="17.5" fill="#FF8D00"/>
+<rect x="148" y="11" width="35" height="305" rx="17.5" fill="#FF8D00"/>
+<rect x="248" y="11" width="35" height="305" rx="17.5" fill="#FF8D00"/>
+<circle cx="66" cy="96" r="35" fill="white" stroke="#373337" stroke-width="35"/>
+<circle cx="265" cy="131" r="35" fill="white" stroke="#373337" stroke-width="35"/>
+<circle cx="164" cy="231" r="35" fill="white" stroke="#373337" stroke-width="35"/>
+</svg>
+
+<span>Settings</span></button>
   </nav>
 
   <script src="script.js"></script>

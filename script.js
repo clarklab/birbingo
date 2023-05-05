@@ -225,11 +225,16 @@ function displayPastOutings() {
   // Sort outings by most recent date
   outings.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+  const emptyOutingsContainer = document.getElementById('empty-outings-container');
+  if (emptyOutingsContainer) {
+    emptyOutingsContainer.remove();
+  }
+
   if (outings.length === 0) {
     const emptyOutingsDiv = document.createElement('div');
     emptyOutingsDiv.classList.add('empty-outings');
+    emptyOutingsDiv.id = 'empty-outings-container';
 
-    
     const emptyOutingsTitle = document.createElement('h3');
     emptyOutingsTitle.textContent = "Let's get outside! ";
 
@@ -238,18 +243,15 @@ function displayPastOutings() {
 
     emptyOutingsTitle.appendChild(secondSentence);
 
-
     const emptyOutingsImage = document.createElement('img');
     emptyOutingsImage.setAttribute('src', 'birb.svg');
 
-    
     emptyOutingsDiv.appendChild(emptyOutingsImage);
     emptyOutingsDiv.appendChild(emptyOutingsTitle);
 
-    pastOutingsList.appendChild(emptyOutingsDiv);
+    pastOutingsList.parentNode.insertBefore(emptyOutingsDiv, pastOutingsList);
   } else {
     outings.forEach((outing, index) => {
-      // (existing code for rendering outings)
       const outingDiv = document.createElement('div');
       outingDiv.classList.add('past-outing');
 
@@ -295,6 +297,7 @@ function displayPastOutings() {
     });
   }
 }
+
 
 
 
