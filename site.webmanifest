@@ -1,0 +1,17 @@
+{
+  "name": "Birbingo",
+  "short_name": "Birbingo",
+  "description": "Win at birbs!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F0EAE4",
+  "theme_color": "#F0EAE4",
+  "icons": [
+    {
+      "src": "/site-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
