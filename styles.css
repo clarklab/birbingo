@@ -5,6 +5,7 @@
 body {
   margin: 0;
   padding: 0 0 80px 0;
+  background-color: #F0EAE4;
 }
 
 main {
@@ -17,7 +18,7 @@ h1, h2, h3{
 
 #bird-list{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   margin-bottom:2rem;
 }
@@ -61,7 +62,7 @@ h1, h2, h3{
 .bird-button .bird-name{
   font-weight: bold;
   display: block;
-  font-size:.85rem;
+  font-size:1rem;
 }
 .bird-button .bird-points{
   display: block;
@@ -177,8 +178,47 @@ input{
 }
 
 .settings-row input:first-child{
-  width:calc(75% - 3rem);
+  width:calc(75% - 2.25rem);
 }
 .settings-row input:last-child{
-  width:calc(25% - 3rem);
+  width:calc(25% - 2.25rem);
 }
+
+.empty-outings{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:2rem;
+}
+.empty-outings img{
+  opacity: .5;
+  max-width: 60%;
+  margin-top:2rem;
+}
+.empty-outings h3{
+  font-size:1.5rem;
+  text-align: center;
+  padding:0 2rem;
+}
+.empty-outings h3 span{
+  opacity: .5;
+}
+
+.well{
+  border-radius: 10px;
+  background:lightcoral;
+  color:#fff;
+  padding:1rem;
+  font-size:1.5rem;
+  font-weight: 600;
+  margin-bottom:3rem;
+}
+.well span{
+  opacity: .75;
+}
+
+
+
+
+
+

@@ -225,53 +225,77 @@ function displayPastOutings() {
   // Sort outings by most recent date
   outings.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  outings.forEach((outing, index) => {
-    const outingDiv = document.createElement('div');
-    outingDiv.classList.add('past-outing');
+  if (outings.length === 0) {
+    const emptyOutingsDiv = document.createElement('div');
+    emptyOutingsDiv.classList.add('empty-outings');
 
-    const outingTitle = document.createElement('h3');
-    outingTitle.textContent = `${outing.location}`;
+    
+    const emptyOutingsTitle = document.createElement('h3');
+    emptyOutingsTitle.textContent = "Let's get outside! ";
 
-    const outingDate = document.createElement('p');
-    const date = new Date(outing.date).toLocaleDateString();
-    outingDate.innerHTML = `${date}`;
+    const secondSentence = document.createElement('span');
+    secondSentence.textContent = "No outings yet, start a new one today.";
 
-    const spottedBirdsList = document.createElement('ul');
-    outing.spottedBirds.forEach((bird) => {
-      const spottedBird = document.createElement('li');
-      spottedBird.textContent = `${bird.name} (${bird.points} points)`;
-      spottedBirdsList.appendChild(spottedBird);
+    emptyOutingsTitle.appendChild(secondSentence);
+
+
+    const emptyOutingsImage = document.createElement('img');
+    emptyOutingsImage.setAttribute('src', 'birb.svg');
+
+    
+    emptyOutingsDiv.appendChild(emptyOutingsImage);
+    emptyOutingsDiv.appendChild(emptyOutingsTitle);
+
+    pastOutingsList.appendChild(emptyOutingsDiv);
+  } else {
+    outings.forEach((outing, index) => {
+      // (existing code for rendering outings)
+      const outingDiv = document.createElement('div');
+      outingDiv.classList.add('past-outing');
+
+      const outingTitle = document.createElement('h3');
+      outingTitle.textContent = `${outing.location}`;
+
+      const outingDate = document.createElement('p');
+      const date = new Date(outing.date).toLocaleDateString();
+      outingDate.innerHTML = `${date}`;
+
+      const spottedBirdsList = document.createElement('ul');
+      outing.spottedBirds.forEach((bird) => {
+        const spottedBird = document.createElement('li');
+        spottedBird.textContent = `${bird.name} (${bird.points} points)`;
+        spottedBirdsList.appendChild(spottedBird);
+      });
+
+      const outingInfo = document.createElement('p');
+      outingInfo.innerHTML = `Total Points: ${outing.totalPoints}<br>Notes: ${outing.notes}`;
+
+      const removeLink = document.createElement('a');
+      removeLink.href = 'javascript:void(0)';
+      removeLink.textContent = 'REMOVE';
+      removeLink.style.color = 'red';
+
+      removeLink.addEventListener('click', () => {
+        const confirmDelete = confirm('Are you sure you want to delete this outing?');
+        if (confirmDelete) {
+          const outings = JSON.parse(localStorage.getItem('outings') || '[]');
+          outings.splice(index, 1);
+          localStorage.setItem('outings', JSON.stringify(outings));
+          displayPastOutings();
+        }
+      });
+
+      outingDiv.appendChild(outingTitle);
+      outingDiv.appendChild(outingDate);
+      outingDiv.appendChild(outingInfo);
+      outingDiv.appendChild(spottedBirdsList);
+      outingDiv.appendChild(removeLink);
+
+      pastOutingsList.appendChild(outingDiv);
     });
-
-
-
-    const outingInfo = document.createElement('p');
-    outingInfo.innerHTML = `Total Points: ${outing.totalPoints}<br>Notes: ${outing.notes}`;
-
-    const removeLink = document.createElement('a');
-    removeLink.href = 'javascript:void(0)';
-    removeLink.textContent = 'REMOVE';
-    removeLink.style.color = 'red';
-
-    removeLink.addEventListener('click', () => {
-      const confirmDelete = confirm('Are you sure you want to delete this outing?');
-      if (confirmDelete) {
-        const outings = JSON.parse(localStorage.getItem('outings') || '[]');
-        outings.splice(index, 1);
-        localStorage.setItem('outings', JSON.stringify(outings));
-        displayPastOutings();
-      }
-    });
-
-    outingDiv.appendChild(outingTitle);
-    outingDiv.appendChild(outingDate);
-    outingDiv.appendChild(outingInfo);
-    outingDiv.appendChild(spottedBirdsList);
-    outingDiv.appendChild(removeLink);
-
-    pastOutingsList.appendChild(outingDiv);
-  });
+  }
 }
+
 
 
 displayPastOutings();
