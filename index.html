@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birdwatching App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <section id="new-outing" class="view" style="display: none;">
+      
+
+      <div class="heading">
+      <h1>New Outing</h1>
+
+      
+      <p class="score"><?xml version="1.0" encoding="UTF-8"?><svg width="28" height="28" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="currentcolor"><path d="m50 27.082c-20.832 0-35.418 22.918-35.418 22.918s10.625 22.918 35.418 22.918c25 0 35.418-22.918 35.418-22.918s-14.375-22.918-35.418-22.918zm0 37.5c-8.125 0-14.582-6.457-14.582-14.582s6.457-14.582 14.582-14.582 14.582 6.457 14.582 14.582-6.457 14.582-14.582 14.582z"/><path d="m56.25 50c0 3.4531-2.7969 6.25-6.25 6.25s-6.25-2.7969-6.25-6.25 2.7969-6.25 6.25-6.25 6.25 2.7969 6.25 6.25"/></g></svg>
+<span id="total-points">0</span></p>
+
+</div>
+      
+
+      <div id="bird-list"></div>
+
+      <h1>Save Outing</h1>
+
+      <div class="outing-info">
+        <input id="location" type="text" placeholder="Location">
+        <textarea id="notes" type="text" placeholder="Any notes?"></textarea>
+        <input id="outing-date" type="hidden">
+      </div>
+
+      <button id="save-outing">Save Outing</button>
+    </section>
+
+    <section id="past-outings" class="view" style="display: block;">
+      <h1>Past Outings</h1>
+      <div id="past-outings-list"></div>
+    </section>
+
+    <section id="settings" class="view" style="display: none;">
+      <h1>Birb List</h1>
+      <form id="settings-form">
+        <div id="settings-bird-list"></div>
+        <button type="button" id="add-bird">Add Bird</button>
+        <button type="submit">Save Settings</button>
+
+        <a href="javascript:void(0)" id="reset-defaults">Reset to Defaults</a>
+
+      </form>
+    </section>
+  </main>
+
+  <nav id="bottom-navbar">
+    <button class="nav-item" data-view="new-outing"><img src="icon-bird.png" width="24" alt=""><span>New Outing</span></button>
+    <button class="nav-item active" data-view="past-outings"><img src="icon-binocs.png" width="24" alt=""><span>Past Outings</span></button>
+    <button class="nav-item" data-view="settings"><img src="icon-slider.png" width="24" alt=""><span>Settings</span></button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
