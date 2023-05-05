@@ -120,9 +120,14 @@ input{
 
 .past-outing{
   border-radius:10px;
-  background-color:#eee;
+  background-color:#fff;
   padding:1rem;
   margin-bottom:1rem;
+}
+
+.past-outing a:last-child{
+  text-decoration: none;
+  font-size:.75rem;
 }
 
 #save-outing, #add-bird, #save-settings{

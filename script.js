@@ -103,18 +103,10 @@ populateBirdList();
 
 document.querySelectorAll('.nav-item').forEach((navItem) => {
   navItem.addEventListener('click', (event) => {
-    document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-
-    document.querySelectorAll('.view').forEach((view) => view.style.display = 'none');
-    document.getElementById(event.currentTarget.dataset.view).style.display = 'block';
-
-    // Call displayPastOutings() when the "Past Outings" nav item is clicked
-    if (event.currentTarget.dataset.view === 'past-outings') {
-      displayPastOutings();
-    }
+    changeActiveView(event.currentTarget.dataset.view);
   });
 });
+
 
 
 document.getElementById('save-outing').addEventListener('click', () => {
@@ -144,6 +136,8 @@ document.getElementById('save-outing').addEventListener('click', () => {
 
   // Show a confirmation message
   alert('Outing saved successfully!');
+changeActiveView('past-outings');
+
 });
 
 
@@ -217,6 +211,23 @@ document.querySelector('.nav-item[data-view="settings"]').addEventListener('clic
 });
 
 
+
+function changeActiveView(viewId) {
+  document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+  document.querySelector(`.nav-item[data-view="${viewId}"]`).classList.add('active');
+
+  document.querySelectorAll('.view').forEach((view) => view.style.display = 'none');
+  document.getElementById(viewId).style.display = 'block';
+
+  // Call displayPastOutings() when the "Past Outings" view is activated
+  if (viewId === 'past-outings') {
+    displayPastOutings();
+  }
+}
+
+
+
+
 function displayPastOutings() {
   const pastOutingsList = document.getElementById('past-outings-list');
   const outings = JSON.parse(localStorage.getItem('outings') || '[]');
@@ -225,16 +236,11 @@ function displayPastOutings() {
   // Sort outings by most recent date
   outings.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const emptyOutingsContainer = document.getElementById('empty-outings-container');
-  if (emptyOutingsContainer) {
-    emptyOutingsContainer.remove();
-  }
-
   if (outings.length === 0) {
     const emptyOutingsDiv = document.createElement('div');
     emptyOutingsDiv.classList.add('empty-outings');
-    emptyOutingsDiv.id = 'empty-outings-container';
 
+    
     const emptyOutingsTitle = document.createElement('h3');
     emptyOutingsTitle.textContent = "Let's get outside! ";
 
@@ -243,15 +249,18 @@ function displayPastOutings() {
 
     emptyOutingsTitle.appendChild(secondSentence);
 
+
     const emptyOutingsImage = document.createElement('img');
     emptyOutingsImage.setAttribute('src', 'birb.svg');
 
+    
     emptyOutingsDiv.appendChild(emptyOutingsImage);
     emptyOutingsDiv.appendChild(emptyOutingsTitle);
 
-    pastOutingsList.parentNode.insertBefore(emptyOutingsDiv, pastOutingsList);
+    pastOutingsList.appendChild(emptyOutingsDiv);
   } else {
     outings.forEach((outing, index) => {
+      // (existing code for rendering outings)
       const outingDiv = document.createElement('div');
       outingDiv.classList.add('past-outing');
 
@@ -297,7 +306,6 @@ function displayPastOutings() {
     });
   }
 }
-
 
 
 
