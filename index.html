@@ -43,7 +43,10 @@
       <h1>Save Outing</h1>
 
       <div class="outing-info">
-        <input id="location" type="text" placeholder="Location">
+        <label for="location">Location</label>
+        <select id="location">
+          <!-- Options will be populated by JavaScript -->
+        </select>
         <textarea id="notes" type="text" placeholder="Any notes?"></textarea>
         <input id="outing-date" type="hidden">
       </div>
@@ -72,6 +75,15 @@
         <a href="javascript:void(0)" id="reset-defaults">Reset to Defaults</a>
 
       </form>
+
+      <div id="location-settings">
+        <h2>Location Presets</h2>
+        <div id="location-list"></div>
+        <input type="text" id="new-location" placeholder="Enter new location" />
+        <button id="add-location">Add location</button>
+        <button id="save-locations">Save Locations</button>
+      </div>
+
     </section>
   </main>
 

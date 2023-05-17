@@ -26,6 +26,85 @@ const defaultBirds = [
   { name: 'Painted Bunting', points: 10 },
 ];
 
+const defaultLocations = [
+  "Inks Lake State Park",
+  "Bee Cave Central Park",
+  "Pedernales Falls State Park",
+  "Commons Ford Park",
+  "McKinney Falls State Park"
+];
+
+let currentOuting = {
+  location: '',
+  notes: '',
+  spottedBirds: [],
+  totalPoints: 0,
+  date: new Date().toISOString(),
+};
+
+// Load the locations from localStorage or use the default locations
+let locations = JSON.parse(localStorage.getItem('locations')) || defaultLocations;
+
+// Function to display the locations in the list
+function displayLocations() {
+  const locationList = document.getElementById('location-list');
+  locationList.innerHTML = '';
+  locations.forEach((location, index) => {
+    const listItem = document.createElement('div');
+    listItem.classList.add('settings-row');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = location;
+    input.addEventListener('input', (event) => {
+      locations[index] = event.target.value;
+    });
+    listItem.appendChild(input);
+    locationList.appendChild(listItem);
+  });
+}
+
+// Function to update the location select options
+function updateLocationOptions() {
+  const locationSelect = document.getElementById('location');
+  locationSelect.innerHTML = ''; // Clear the existing options
+
+  // Add an option for each location
+  locations.forEach(location => {
+    const option = document.createElement('option');
+    option.value = location;
+    option.textContent = location;
+    locationSelect.appendChild(option);
+  });
+}
+
+// Call this function inside the save-locations event listener
+document.getElementById('save-locations').addEventListener('click', () => {
+  // Remove any empty locations
+  locations = locations.filter(location => location.trim() !== '');
+  localStorage.setItem('locations', JSON.stringify(locations));
+  displayLocations();
+
+  // Update the location select options
+  updateLocationOptions();
+});
+
+
+// Display the locations when the page loads
+displayLocations();
+
+// Handle adding a new location
+document.getElementById('add-location').addEventListener('click', () => {
+  const newLocationInput = document.getElementById('new-location');
+  const newLocation = newLocationInput.value;
+  if (newLocation) {
+    locations.push(newLocation);
+    localStorage.setItem('locations', JSON.stringify(locations));
+    newLocationInput.value = '';
+    displayLocations();
+  }
+});
+
+
 let birds = JSON.parse(localStorage.getItem('birds')) || defaultBirds;
 
 function resetToDefaults() {
@@ -45,6 +124,81 @@ document.getElementById('reset-defaults').addEventListener('click', () => {
 
 let spottedBirds = [];
 let totalPoints = 0;
+
+
+// Populate the location dropdown
+const locationSelect = document.getElementById('location');
+locations.forEach((location, index) => {
+  const option = document.createElement('option');
+  option.value = index;
+  option.textContent = location;
+  locationSelect.appendChild(option);
+});
+
+// Add a "Custom" option
+const customOption = document.createElement('option');
+customOption.value = 'custom';
+customOption.textContent = 'Custom...';
+locationSelect.appendChild(customOption);
+
+// Create a custom location input and hide it initially
+const customLocationInput = document.createElement('input');
+customLocationInput.id = 'custom-location';
+customLocationInput.style.display = 'none';
+locationSelect.parentElement.appendChild(customLocationInput);
+
+// Show the custom location input when the "Custom" option is selected
+locationSelect.addEventListener('change', () => {
+  if (locationSelect.value === 'custom') {
+    customLocationInput.style.display = 'block';
+  } else {
+    customLocationInput.style.display = 'none';
+  }
+});
+
+populateBirdList();
+
+function toggleBirdSpotting(bird) {
+  const index = spottedBirds.findIndex((spottedBird) => spottedBird.name === bird.name);
+  const birdButton = document.querySelector(`[data-name="${bird.name}"]`);
+
+  if (index === -1) {
+    spottedBirds.push(bird);
+    totalPoints += bird.points;
+    birdButton.classList.add('spotted');
+  } else {
+    spottedBirds.splice(index, 1);
+    totalPoints -= bird.points;
+    birdButton.classList.remove('spotted');
+  }
+
+  document.getElementById('total-points').textContent = totalPoints;
+
+  // Save the current session to localStorage
+  localStorage.setItem('currentOuting', JSON.stringify({
+    spottedBirds: spottedBirds,
+    totalPoints: totalPoints
+  }));
+}
+
+function loadSession() {
+  let currentSession = JSON.parse(localStorage.getItem('currentOuting'));
+  if (currentSession) {
+    spottedBirds = currentSession.spottedBirds;
+    totalPoints = currentSession.totalPoints;
+
+    // Update the total points display
+    document.getElementById('total-points').textContent = totalPoints;
+
+    // Mark the spotted birds as spotted
+    spottedBirds.forEach(bird => {
+      const birdButton = document.querySelector(`[data-name="${bird.name}"]`);
+      if (birdButton) {birdButton.classList.add('spotted');}
+    });
+  }
+}
+loadSession();
+
 
 function populateBirdList() {
   const birdList = document.getElementById('bird-list');
@@ -75,31 +229,17 @@ function populateBirdList() {
     birdButton.appendChild(birdName);
     birdButton.appendChild(birdPoints);
 
+    if (currentOuting.spottedBirds.some(spottedBird => spottedBird.name === bird.name)) {
+      birdButton.classList.add('spotted');
+    }
+
     birdButton.addEventListener('click', () => toggleBirdSpotting(bird));
     birdList.appendChild(birdButton);
+    loadSession();
   });
 }
 
 
-
-function toggleBirdSpotting(bird) {
-  const index = spottedBirds.findIndex((spottedBird) => spottedBird.name === bird.name);
-  const birdButton = document.querySelector(`[data-name="${bird.name}"]`);
-
-  if (index === -1) {
-    spottedBirds.push(bird);
-    totalPoints += bird.points;
-    birdButton.classList.add('spotted');
-  } else {
-    spottedBirds.splice(index, 1);
-    totalPoints -= bird.points;
-    birdButton.classList.remove('spotted');
-  }
-
-  document.getElementById('total-points').textContent = totalPoints;
-}
-
-populateBirdList();
 
 document.querySelectorAll('.nav-item').forEach((navItem) => {
   navItem.addEventListener('click', (event) => {
@@ -110,12 +250,18 @@ document.querySelectorAll('.nav-item').forEach((navItem) => {
 
 
 document.getElementById('save-outing').addEventListener('click', () => {
-  const locationInput = document.getElementById('location');
+  const locationSelect = document.getElementById('location');
+  const customLocationInput = document.getElementById('custom-location');
   const notesInput = document.getElementById('notes');
   const date = new Date().toISOString();
 
+  // Determine whether to use the selected location or the custom location
+  const location = locationSelect.value !== 'custom'
+    ? defaultLocations[locationSelect.value]
+    : customLocationInput.value;
+
   const outing = {
-    location: locationInput.value,
+    location, // use the location determined above
     notes: notesInput.value,
     spottedBirds: spottedBirds,
     totalPoints: totalPoints,
@@ -127,7 +273,9 @@ document.getElementById('save-outing').addEventListener('click', () => {
   localStorage.setItem('outings', JSON.stringify(outings));
 
   // Clear the inputs and spotted birds list after saving
-  locationInput.value = '';
+  locationSelect.value = defaultLocations[0]; // reset the location select to the first default location
+  customLocationInput.value = ''; // clear the custom location input
+  customLocationInput.style.display = 'none'; // hide the custom location input
   notesInput.value = '';
   spottedBirds = [];
   totalPoints = 0;
@@ -136,9 +284,9 @@ document.getElementById('save-outing').addEventListener('click', () => {
 
   // Show a confirmation message
   alert('Outing saved successfully!');
-changeActiveView('past-outings');
-
+  changeActiveView('past-outings');
 });
+
 
 
 
@@ -176,7 +324,9 @@ document.getElementById('settings-form').addEventListener('submit', (event) => {
 
   localStorage.setItem('birds', JSON.stringify(birds));
   populateBirdList();
+
 });
+
 
 
 function populateSettingsBirdList() {
