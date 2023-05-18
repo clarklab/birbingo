@@ -279,8 +279,10 @@ document.getElementById('save-outing').addEventListener('click', () => {
   notesInput.value = '';
   spottedBirds = [];
   totalPoints = 0;
+  localStorage.setItem('currentOuting', JSON.stringify(currentOuting));
   document.getElementById('total-points').textContent = totalPoints;
   document.querySelectorAll('.bird-button').forEach((button) => button.classList.remove('spotted'));
+
 
   // Show a confirmation message
   alert('Outing saved successfully!');
@@ -380,7 +382,7 @@ function changeActiveView(viewId) {
 
 function displayPastOutings() {
   const pastOutingsList = document.getElementById('past-outings-list');
-  const outings = JSON.parse(localStorage.getItem('outings') || '[]');
+  let outings = JSON.parse(localStorage.getItem('outings') || '[]');
   pastOutingsList.innerHTML = '';
 
   // Sort outings by most recent date
@@ -389,73 +391,102 @@ function displayPastOutings() {
   if (outings.length === 0) {
     const emptyOutingsDiv = document.createElement('div');
     emptyOutingsDiv.classList.add('empty-outings');
-
-    
     const emptyOutingsTitle = document.createElement('h3');
     emptyOutingsTitle.textContent = "Let's get outside! ";
-
     const secondSentence = document.createElement('span');
     secondSentence.textContent = "No outings yet, start a new one today.";
-
     emptyOutingsTitle.appendChild(secondSentence);
-
-
     const emptyOutingsImage = document.createElement('img');
     emptyOutingsImage.setAttribute('src', 'birb.svg');
-
-    
     emptyOutingsDiv.appendChild(emptyOutingsImage);
     emptyOutingsDiv.appendChild(emptyOutingsTitle);
-
     pastOutingsList.appendChild(emptyOutingsDiv);
   } else {
-    outings.forEach((outing, index) => {
-      // (existing code for rendering outings)
-      const outingDiv = document.createElement('div');
-      outingDiv.classList.add('past-outing');
+    outings = outings.map((outing, index) => {
+      if (!outing.coords) {
+        return lookupLocation(outing.location)
+          .then(coords => {
+            outing.coords = coords;
+            return outing;
+          });
+      } else {
+        return Promise.resolve(outing);
+      }
+    });
 
-      const outingTitle = document.createElement('h3');
-      outingTitle.textContent = `${outing.location}`;
+    Promise.all(outings).then((updatedOutings) => {
+      updatedOutings.forEach((outing, index) => {
+        const outingDiv = document.createElement('div');
+        outingDiv.classList.add('past-outing');
 
-      const outingDate = document.createElement('p');
-      const date = new Date(outing.date).toLocaleDateString();
-      outingDate.innerHTML = `<span class="opacity-50">${date}</span>`;
+        const outingTitle = document.createElement('h3');
+        outingTitle.textContent = `${outing.location}`;
 
-      const spottedBirdsList = document.createElement('ul');
-      outing.spottedBirds.forEach((bird) => {
-        const spottedBird = document.createElement('li');
-        spottedBird.textContent = `${bird.name} (${bird.points} points)`;
-        spottedBirdsList.appendChild(spottedBird);
+        const outingCoords = document.createElement('p');
+        outingCoords.textContent = `${outing.coords.lat}, ${outing.coords.lon}`;
+
+        const outingDate = document.createElement('p');
+        const date = new Date(outing.date).toLocaleDateString();
+        outingDate.innerHTML = `<span class="opacity-50">${date}</span>`;
+
+        const spottedBirdsList = document.createElement('ul');
+        outing.spottedBirds.forEach((bird) => {
+          const spottedBird = document.createElement('li');
+          spottedBird.textContent = `${bird.name} (${bird.points} points)`;
+          spottedBirdsList.appendChild(spottedBird);
+        });
+
+        const outingInfo = document.createElement('div');
+        outingInfo.innerHTML = `<div class="points">${outing.totalPoints} points</div><div class="notes"><span class="label">Notes</span>${outing.notes}</div><h4>Bird List</h4>`;
+
+        const removeLink = document.createElement('a');
+        removeLink.href = 'javascript:void(0)';
+        removeLink.textContent = 'DROP';
+        removeLink.style.color = 'red';
+
+        removeLink.addEventListener('click', () => {
+          const confirmDelete = confirm('Are you sure you want to delete this outing?');
+          if (confirmDelete) {
+            const outings = JSON.parse(localStorage.getItem('outings') || '[]');
+            outings.splice(index, 1);
+            localStorage.setItem('outings', JSON.stringify(outings));
+            displayPastOutings();
+          }
+        });
+
+        outingDiv.appendChild(outingTitle);
+        outingDiv.appendChild(outingCoords);
+        outingDiv.appendChild(outingInfo);
+        outingDiv.appendChild(spottedBirdsList);
+        outingDiv.appendChild(outingDate);
+        outingDiv.appendChild(removeLink);
+
+        pastOutingsList.appendChild(outingDiv);
       });
-
-      const outingInfo = document.createElement('div');
-      outingInfo.innerHTML = `<div class="points">${outing.totalPoints} points</div><div class="notes"><span class="label">Notes</span>${outing.notes}</div><h4>Bird List</h4>`;
-
-      const removeLink = document.createElement('a');
-      removeLink.href = 'javascript:void(0)';
-      removeLink.textContent = 'DROP';
-      removeLink.style.color = 'red';
-
-      removeLink.addEventListener('click', () => {
-        const confirmDelete = confirm('Are you sure you want to delete this outing?');
-        if (confirmDelete) {
-          const outings = JSON.parse(localStorage.getItem('outings') || '[]');
-          outings.splice(index, 1);
-          localStorage.setItem('outings', JSON.stringify(outings));
-          displayPastOutings();
-        }
-      });
-
-      outingDiv.appendChild(outingTitle);
-      outingDiv.appendChild(outingInfo);
-      outingDiv.appendChild(spottedBirdsList);
-      outingDiv.appendChild(outingDate);
-      outingDiv.appendChild(removeLink);
-
-      pastOutingsList.appendChild(outingDiv);
+      // Save the updated outings back to local storage
+      localStorage.setItem('outings', JSON.stringify(updatedOutings));
     });
   }
 }
+
+function lookupLocation(locationName) {
+  return fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${locationName}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        const locationData = data[0];
+        return { lat: locationData.lat, lon: locationData.lon };
+      } else {
+        console.log(`No location found for ${locationName}`);
+        return null;
+      }
+    })
+    .catch(error => {
+      console.log('Error:', error);
+      return null;
+    });
+}
+
 
 
 
