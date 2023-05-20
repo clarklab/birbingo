@@ -361,6 +361,7 @@ input{
   overflow: hidden;
   display: flex;
   margin-bottom:1rem;
+  position: relative;
 }
 
 .card .map{
@@ -435,6 +436,15 @@ input{
   transform: translateX(-50%);
   font-size:1rem;
   z-index: 2;
+}
+.card .drop{
+  position: absolute;
+  top:0;
+  right:0;
+  padding:1rem;
+  font-size:.8rem;
+  text-decoration: none;
+  opacity: 0.5;
 }
 
 h1{

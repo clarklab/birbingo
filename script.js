@@ -453,6 +453,24 @@ function displayPastOutings() {
           birdsDiv.appendChild(birdDiv);
         });
 
+        const removeLink = document.createElement('a');
+        removeLink.href = 'javascript:void(0)';
+        removeLink.classList.add('drop');
+        removeLink.innerHTML = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+</svg>`;
+        removeLink.style.color = 'red';
+
+        removeLink.addEventListener('click', () => {
+          const confirmDelete = confirm('Are you sure you want to delete this outing?');
+          if (confirmDelete) {
+            const outings = JSON.parse(localStorage.getItem('outings') || '[]');
+            outings.splice(index, 1);
+            localStorage.setItem('outings', JSON.stringify(outings));
+            displayPastOutings();
+          }});
+
+        bodyDiv.appendChild(removeLink);
         bodyDiv.appendChild(dateDiv);
         bodyDiv.appendChild(titleH1);
         bodyDiv.appendChild(birdsDiv);
