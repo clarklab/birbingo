@@ -29,6 +29,7 @@ h1, h2, h3{
   top:0;
   padding-top:.5rem;
   padding-bottom:.5rem;
+  height: 48px;
 
 }
 
@@ -63,6 +64,7 @@ h1, h2, h3{
   width: 100%;
   background-color: white;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
 .bird-button {
@@ -139,6 +141,9 @@ input{
   padding:1rem;
 }
 
+#past-outings-list{
+  padding-top:3rem;
+}
 .past-outing{
   border-radius:10px;
   background-color:#fff;
@@ -207,6 +212,7 @@ input{
   background:coral;
   color:#fff;
   font-size: 1.6rem;
+  line-height: 1.6rem;
   font-weight: 600;
   padding:5px 15px 5px 10px;
   margin:0;
@@ -349,4 +355,90 @@ input{
 
 
 
+.card{
+  background:#fff;
+  border-radius:10px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom:1rem;
+}
 
+.card .map{
+  width:30%;
+  line-height: 0;
+}
+.card .map {
+  background-size:140% auto;
+  background-position: center center;
+  position: relative;
+}
+.card .map:after{
+  top:0; right:0; left:0; bottom:0;
+  display: block;
+  content:" ";
+  background-color: lightcoral;
+  position: absolute;
+  opacity: 0.2;
+  z-index: 1;
+}
+.card .date{
+  opacity:.5;
+  font-size:.85rem;
+  line-height: 1;
+  margin-bottom:.2rem;
+  padding:0 1.5rem;
+
+}
+.card .title{
+  size:1.5rem;
+  line-height: 1;
+  padding:0 1.5rem;
+}
+.card .body{
+  width:70%;
+  padding:1.5rem 0;
+}
+.card .birds{
+  overflow: scroll;
+  white-space: nowrap;
+  margin-top:2rem;
+  padding:0 1.5rem;
+}
+.card .birds::-webkit-scrollbar {
+  display: none;
+}
+.card .bird{
+  background-color: forestgreen;
+  color:#fff;
+  display: inline-block;
+  padding:6px 8px;
+  border-radius:8px;
+  line-height: 1.6rem;
+  margin-right:4px;
+}
+.card .bird span{
+  background:rgba(255, 255, 255, .5);
+  border-radius:100px;
+  width:20px;
+  height:20px;
+  line-height: 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size:.8rem;
+  display: inline-block;
+  margin-left:4px;
+}
+.card .score{
+  position: absolute;
+  bottom:1.5rem;
+  left:50%;
+  transform: translateX(-50%);
+  font-size:1rem;
+  z-index: 2;
+}
+
+h1{
+  display: flex;
+  align-items: center;
+  gap:.5rem;
+}

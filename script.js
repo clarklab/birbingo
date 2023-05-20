@@ -378,6 +378,10 @@ function changeActiveView(viewId) {
 }
 
 
+document.getElementById('new-outing-plus').addEventListener('click', (event) => {
+  event.preventDefault(); // prevent default click behavior
+  document.querySelector('.nav-item[data-view="new-outing"]').click(); // trigger click on 'new outing' nav item
+});
 
 
 function displayPastOutings() {
@@ -392,7 +396,7 @@ function displayPastOutings() {
     const emptyOutingsDiv = document.createElement('div');
     emptyOutingsDiv.classList.add('empty-outings');
     const emptyOutingsTitle = document.createElement('h3');
-    emptyOutingsTitle.textContent = "Let's get outside! ";
+    emptyOutingsTitle.textContent = "Let's get outside!";
     const secondSentence = document.createElement('span');
     secondSentence.textContent = "No outings yet, start a new one today.";
     emptyOutingsTitle.appendChild(secondSentence);
@@ -416,52 +420,47 @@ function displayPastOutings() {
 
     Promise.all(outings).then((updatedOutings) => {
       updatedOutings.forEach((outing, index) => {
-        const outingDiv = document.createElement('div');
-        outingDiv.classList.add('past-outing');
+        const cardDiv = document.createElement('div');
+        cardDiv.classList.add('card');
 
-        const outingTitle = document.createElement('h3');
-        outingTitle.textContent = `${outing.location}`;
+        const mapDiv = document.createElement('div');
+        mapDiv.classList.add('map');
+        mapDiv.style.backgroundImage = `url(https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/${outing.coords.lon},${outing.coords.lat},14.25,0,0/400x400@2x?access_token=pk.eyJ1IjoiY2xhcmtsYWIiLCJhIjoiY2xodHJiN3RlMTI4MTNwbXJwb3ExempyaSJ9.zLTFuDlwmmYsBIuEEihy3w)`;
 
-        const outingCoords = document.createElement('p');
-        outingCoords.textContent = `${outing.coords.lat}, ${outing.coords.lon}`;
+        const scoreP = document.createElement('p');
+        scoreP.classList.add('score');
+        scoreP.innerHTML = `<?xml version="1.0" encoding="UTF-8"?><svg width="28" height="28" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="currentcolor"><path d="m50 27.082c-20.832 0-35.418 22.918-35.418 22.918s10.625 22.918 35.418 22.918c25 0 35.418-22.918 35.418-22.918s-14.375-22.918-35.418-22.918zm0 37.5c-8.125 0-14.582-6.457-14.582-14.582s6.457-14.582 14.582-14.582 14.582 6.457 14.582 14.582-6.457 14.582-14.582 14.582z"/><path d="m56.25 50c0 3.4531-2.7969 6.25-6.25 6.25s-6.25-2.7969-6.25-6.25 2.7969-6.25 6.25-6.25 6.25 2.7969 6.25 6.25"/></g></svg><span id="total-points">${outing.totalPoints}</span>`;
 
-        const outingDate = document.createElement('p');
-        const date = new Date(outing.date).toLocaleDateString();
-        outingDate.innerHTML = `<span class="opacity-50">${date}</span>`;
+        mapDiv.appendChild(scoreP);
 
-        const spottedBirdsList = document.createElement('ul');
+        const bodyDiv = document.createElement('div');
+        bodyDiv.classList.add('body');
+
+        const dateDiv = document.createElement('div');
+        dateDiv.classList.add('date');
+        dateDiv.textContent = new Date(outing.date).toLocaleDateString();
+
+        const titleH1 = document.createElement('h1');
+        titleH1.classList.add('title');
+        titleH1.textContent = outing.location;
+
+        const birdsDiv = document.createElement('div');
+        birdsDiv.classList.add('birds');
         outing.spottedBirds.forEach((bird) => {
-          const spottedBird = document.createElement('li');
-          spottedBird.textContent = `${bird.name} (${bird.points} points)`;
-          spottedBirdsList.appendChild(spottedBird);
+          const birdDiv = document.createElement('div');
+          birdDiv.classList.add('bird');
+          birdDiv.innerHTML = `${bird.name} <span>${bird.points}</span>`;
+          birdsDiv.appendChild(birdDiv);
         });
 
-        const outingInfo = document.createElement('div');
-        outingInfo.innerHTML = `<div class="points">${outing.totalPoints} points</div><div class="notes"><span class="label">Notes</span>${outing.notes}</div><h4>Bird List</h4>`;
+        bodyDiv.appendChild(dateDiv);
+        bodyDiv.appendChild(titleH1);
+        bodyDiv.appendChild(birdsDiv);
 
-        const removeLink = document.createElement('a');
-        removeLink.href = 'javascript:void(0)';
-        removeLink.textContent = 'DROP';
-        removeLink.style.color = 'red';
+        cardDiv.appendChild(mapDiv);
+        cardDiv.appendChild(bodyDiv);
 
-        removeLink.addEventListener('click', () => {
-          const confirmDelete = confirm('Are you sure you want to delete this outing?');
-          if (confirmDelete) {
-            const outings = JSON.parse(localStorage.getItem('outings') || '[]');
-            outings.splice(index, 1);
-            localStorage.setItem('outings', JSON.stringify(outings));
-            displayPastOutings();
-          }
-        });
-
-        outingDiv.appendChild(outingTitle);
-        outingDiv.appendChild(outingCoords);
-        outingDiv.appendChild(outingInfo);
-        outingDiv.appendChild(spottedBirdsList);
-        outingDiv.appendChild(outingDate);
-        outingDiv.appendChild(removeLink);
-
-        pastOutingsList.appendChild(outingDiv);
+        pastOutingsList.appendChild(cardDiv);
       });
       // Save the updated outings back to local storage
       localStorage.setItem('outings', JSON.stringify(updatedOutings));
@@ -486,8 +485,6 @@ function lookupLocation(locationName) {
       return null;
     });
 }
-
-
 
 
 displayPastOutings();
