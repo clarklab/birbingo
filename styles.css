@@ -6,6 +6,7 @@ body {
   margin: 0;
   padding: 0 0 100px 0;
   background-color: #F0EAE4;
+
 }
 
 main {
@@ -107,14 +108,14 @@ h1, h2, h3{
 
 .outing-info input, .outing-info textarea, .outing-info select {
   margin-bottom: 1rem;
-  width: calc(100% - 2rem - 4px);
+  width: calc(100% - 2rem );
   border-radius:10px;
-  font-size:1rem;
-  border:2px solid coral;
+  font-size:1.25rem;
+  border:none;
 }
 
 .outing-info textarea {
-  width: calc(100% - 2rem - 4px);
+  width: calc(100% - 2rem );
   height: 100px;
   padding:1rem;
 }
@@ -122,6 +123,13 @@ h1, h2, h3{
 .outing-info select {
   width: 100%;
   padding:1rem;
+}
+
+select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
 }
 
 @media screen and (min-width: 768px) {
