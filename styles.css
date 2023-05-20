@@ -78,7 +78,7 @@ h1, h2, h3{
 }
 
 .bird-button .bird-name{
-  font-weight: 600;
+  font-weight: 500;
   display: block;
   font-size:1rem;
 }
@@ -391,9 +391,9 @@ input{
 
 }
 .card .title{
-  size:1.5rem;
+  font-size:1.35rem;
   line-height: 1;
-  padding:0 1.5rem;
+  padding:0 1rem 0 1.5rem;
 }
 .card .body{
   width:70%;
@@ -402,7 +402,7 @@ input{
 .card .birds{
   overflow: scroll;
   white-space: nowrap;
-  margin-top:2rem;
+  margin-top:2.5rem;
   padding:0 1.5rem;
 }
 .card .birds::-webkit-scrollbar {
@@ -441,7 +441,7 @@ input{
   position: absolute;
   top:0;
   right:0;
-  padding:1rem;
+  padding:1rem .5rem 1rem 1rem;
   font-size:.8rem;
   text-decoration: none;
   opacity: 0.5;
