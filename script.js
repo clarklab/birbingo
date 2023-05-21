@@ -86,6 +86,7 @@ document.getElementById('save-locations').addEventListener('click', () => {
 
   // Update the location select options
   updateLocationOptions();
+  alert("Great! Locations have been updated and are ready to use!");
 });
 
 
@@ -325,7 +326,9 @@ document.getElementById('settings-form').addEventListener('submit', (event) => {
   }, []);
 
   localStorage.setItem('birds', JSON.stringify(birds));
+  alert("High five! Your list of local birds has been updated. All past outings will have these new point totals.");
   populateBirdList();
+  populateSettingsBirdList();
 
 });
 
